@@ -1,45 +1,24 @@
-import React, { useEffect, useState } from 'react'
-import { fetchAll } from '../lib/api'
+import React, { useEffect, useState } from "react";
+import { getPlayerData } from "../lib/api.js";
 
 export default function Home() {
-  const [profile, setProfile] = useState(null)
-  const [loading, setLoading] = useState(true)
+  const [profile, setProfile] = useState(null);
 
   useEffect(() => {
-    async function load() {
-      try {
-        const data = await fetchAll()
-        const uid = localStorage.getItem('tff_uid')
-        if (!uid) {
-          setProfile(null)
-        } else {
-          const found = data.find(r => r.uid === uid)
-          setProfile(found || null)
-        }
-      } catch (e) {
-        console.error(e)
-      } finally {
-        setLoading(false)
-      }
-    }
-    load()
-  }, [])
+    getPlayerData().then(setProfile);
+  }, []);
 
-  if (loading) return <div className="card">Loading...</div>
-  if (!profile) return (
-    <div className="card">
-      <h2 className="text-xl font-bold" style={{color:'#ff4d4d'}}>No profile</h2>
-      <p>You're not logged in. <a href="https://auth.tffteam.qzz.io/login" className="underline">Login</a> to see your profile.</p>
-    </div>
-  )
+  if (!profile) return <p>Loading player data...</p>;
 
   return (
-    <div className="card">
-      <h2 className="text-xl font-bold" style={{color:'#ff4d4d'}}>Player Profile</h2>
-      <p><strong>Username:</strong> {profile.name}</p>
-      <p><strong>Region:</strong> {profile.region}</p>
-      <p><strong>Join Date:</strong> {profile.joined}</p>
-      <p><strong>UID:</strong> {profile.uid}</p>
+    <div className="text-center">
+      <h2 className="text-3xl text-red-500 font-bold mb-4">Player Profile</h2>
+      <div className="bg-red-900/30 p-4 rounded-2xl shadow-lg inline-block">
+        <p><b>Name:</b> {profile.name}</p>
+        <p><b>Join Date:</b> {profile.joinDate}</p>
+        <p><b>Region:</b> {profile.region}</p>
+        <p><b>Level:</b> {profile.level}</p>
+      </div>
     </div>
-  )
+  );
 }
