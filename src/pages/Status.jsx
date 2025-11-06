@@ -1,30 +1,27 @@
-import React, { useEffect, useState } from 'react'
-import { fetchAll } from '../lib/api'
+import React, { useEffect, useState } from "react";
+import { getGuildStatus } from "../lib/api.js";
 
 export default function Status() {
-  const [status, setStatus] = useState(null)
-  useEffect(() => {
-    async function load() {
-      try {
-        const data = await fetchAll()
-        const s = data.find(r => r.name === '__guild_status')
-        setStatus(s || null)
-      } catch (e) {
-        console.error(e)
-      }
-    }
-    load()
-    const id = setInterval(load, 5*60*1000)
-    return () => clearInterval(id)
-  }, [])
+  const [status, setStatus] = useState(null);
 
-  if (!status) return <div className="card">Guild status not set.</div>
+  useEffect(() => {
+    const fetchStatus = async () => {
+      const data = await getGuildStatus();
+      setStatus(data);
+    };
+    fetchStatus();
+    const interval = setInterval(fetchStatus, 300000); // 5 minutes
+    return () => clearInterval(interval);
+  }, []);
+
+  if (!status) return <p>Loading guild status...</p>;
 
   return (
-    <div className="card">
-      <h2 className="text-xl font-bold" style={{color:'#ff4d4d'}}>Guild Bot Status</h2>
-      <p><strong>Online:</strong> {status.online === 'true' ? '🟢 Online' : '🔴 Offline'}</p>
-      <p><strong>Last Update:</strong> {status.joined}</p>
+    <div className="text-center">
+      <h2 className="text-3xl text-red-500 font-bold mb-4">Guild Status</h2>
+      <p>Bot Connection: {status.bot ? "🟢 Online" : "🔴 Offline"}</p>
+      <p>Members: {status.members}</p>
+      <p>Active Players: {status.active}</p>
     </div>
-  )
+  );
 }
