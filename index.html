@@ -3,10 +3,38 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TFF_TEAM | Guild Portal</title>
+    <title>TFF_TEAM | Auth Portal</title>
+
+    <!-- Fonts & Basic Theme -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        margin: 0;
+        font-family: 'Orbitron', sans-serif;
+        background: linear-gradient(180deg, #000000 0%, #1a0000 100%);
+        color: #fff;
+      }
+      #root {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        text-align: center;
+      }
+      .glow {
+        color: #ff0000;
+        text-shadow: 0 0 10px #ff0000, 0 0 20px #800000;
+      }
+    </style>
   </head>
-  <body class="bg-black text-white">
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
+  <body>
+    <div id="root">
+      <h1 class="glow">Loading TFF_TEAM Auth...</h1>
+    </div>
+
+    <script type="module" src="/main.jsx"></script>
   </body>
 </html>
