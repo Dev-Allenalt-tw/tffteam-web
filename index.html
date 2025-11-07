@@ -3,38 +3,260 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TFF_TEAM | Auth Portal</title>
+    <title>TFF_TEAM | Guild Portal</title>
 
-    <!-- Fonts & Basic Theme -->
     <link
       href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap"
       rel="stylesheet"
     />
+
     <style>
+      :root {
+        --red: #ff0000;
+        --dark: #0a0000;
+      }
+
       body {
         margin: 0;
-        font-family: 'Orbitron', sans-serif;
         background: linear-gradient(180deg, #000000 0%, #1a0000 100%);
-        color: #fff;
-      }
-      #root {
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        font-family: 'Orbitron', sans-serif;
+        color: white;
         min-height: 100vh;
+      }
+
+      header {
+        background: rgba(100, 0, 0, 0.5);
+        padding: 1rem;
+        text-align: center;
+        border-bottom: 1px solid #300;
+      }
+
+      header h1 {
+        color: var(--red);
+        margin: 0;
+        font-size: 2rem;
+        text-shadow: 0 0 10px var(--red);
+      }
+
+      nav {
+        margin-top: 10px;
+      }
+
+      nav button {
+        background: none;
+        color: white;
+        border: 1px solid #700;
+        margin: 0 5px;
+        padding: 6px 14px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: 0.3s;
+      }
+
+      nav button:hover,
+      nav button.active {
+        background: var(--red);
+        color: black;
+      }
+
+      main {
+        padding: 2rem;
         text-align: center;
       }
-      .glow {
-        color: #ff0000;
-        text-shadow: 0 0 10px #ff0000, 0 0 20px #800000;
+
+      section {
+        display: none;
+        animation: fadeIn 0.3s ease-in-out;
+      }
+
+      section.active {
+        display: block;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      .card {
+        background: rgba(100, 0, 0, 0.3);
+        border: 1px solid #500;
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin: 1rem auto;
+        width: 90%;
+        max-width: 400px;
+        box-shadow: 0 0 10px #600;
+      }
+
+      input,
+      button,
+      select {
+        font-family: inherit;
+      }
+
+      input {
+        width: 80%;
+        padding: 8px;
+        margin: 6px;
+        background: rgba(255, 0, 0, 0.1);
+        border: 1px solid #700;
+        border-radius: 6px;
+        color: white;
+      }
+
+      input:focus {
+        outline: 1px solid var(--red);
+      }
+
+      .submit-btn {
+        background: var(--red);
+        color: black;
+        padding: 8px 18px;
+        border: none;
+        border-radius: 8px;
+        margin-top: 8px;
+        cursor: pointer;
+        transition: 0.2s;
+      }
+
+      .submit-btn:hover {
+        background: #ff3333;
+      }
+
+      footer {
+        background: rgba(60, 0, 0, 0.4);
+        text-align: center;
+        padding: 10px;
+        font-size: 0.8rem;
+        color: #999;
+        border-top: 1px solid #300;
       }
     </style>
   </head>
-  <body>
-    <div id="root">
-      <h1 class="glow">Loading TFF_TEAM Auth...</h1>
-    </div>
 
-    <script type="module" src="/main.jsx"></script>
+  <body>
+    <header>
+      <h1>TFF_TEAM</h1>
+      <nav>
+        <button id="homeBtn" class="active" onclick="showPage('home')">Home</button>
+        <button onclick="showPage('status')">Status</button>
+        <button onclick="showPage('application')">Application</button>
+        <button onclick="showPage('tickets')">Tickets</button>
+      </nav>
+    </header>
+
+    <main>
+      <!-- 🏠 HOME PAGE -->
+      <section id="home" class="active">
+        <h2 class="glow">Player Profile</h2>
+        <div class="card" id="profile">
+          <p><b>Name:</b> Demo_Player</p>
+          <p><b>Join Date:</b> 2023-05-14</p>
+          <p><b>Region:</b> India</p>
+          <p><b>Level:</b> 87</p>
+        </div>
+      </section>
+
+      <!-- ⚙️ STATUS PAGE -->
+      <section id="status">
+        <h2 class="glow">Guild Status</h2>
+        <div class="card" id="statusBox">
+          <p><b>Bot Connection:</b> 🟢 Online</p>
+          <p><b>Members:</b> 49</p>
+          <p><b>Active Players:</b> 32</p>
+          <p><small>Last Updated: <span id="lastUpdate">Just now</span></small></p>
+        </div>
+      </section>
+
+      <!-- 📝 APPLICATION PAGE -->
+      <section id="application">
+        <h2 class="glow">Join TFF_TEAM</h2>
+        <div class="card">
+          <form id="applyForm" onsubmit="submitApp(event)">
+            <input type="text" id="name" placeholder="In-Game Name" required /><br />
+            <input type="text" id="uid" placeholder="Free Fire UID" required /><br />
+            <input type="text" id="region" placeholder="Region (e.g. India)" required /><br />
+            <button class="submit-btn" type="submit">Submit Application</button>
+          </form>
+          <p id="appMsg"></p>
+        </div>
+      </section>
+
+      <!-- 🎫 TICKETS PAGE -->
+      <section id="tickets">
+        <h2 class="glow">Your Applications</h2>
+        <div id="ticketList" class="card">
+          <p>No applications yet.</p>
+        </div>
+      </section>
+    </main>
+
+    <footer>© 2025 TFF_TEAM Guild. All Rights Reserved.</footer>
+
+    <script>
+      // Navigation
+      function showPage(id) {
+        document.querySelectorAll("section").forEach((s) => s.classList.remove("active"));
+        document.querySelectorAll("nav button").forEach((b) => b.classList.remove("active"));
+        document.getElementById(id).classList.add("active");
+        event.target.classList.add("active");
+      }
+
+      // Status Auto Refresh every 5 minutes
+      function refreshStatus() {
+        const active = Math.floor(Math.random() * 40) + 10;
+        const members = 50;
+        const botOnline = Math.random() > 0.1;
+        document.getElementById("statusBox").innerHTML = `
+          <p><b>Bot Connection:</b> ${botOnline ? "🟢 Online" : "🔴 Offline"}</p>
+          <p><b>Members:</b> ${members}</p>
+          <p><b>Active Players:</b> ${active}</p>
+          <p><small>Last Updated: ${new Date().toLocaleTimeString()}</small></p>
+        `;
+      }
+      setInterval(refreshStatus, 300000);
+      refreshStatus();
+
+      // Application form
+      const tickets = [];
+
+      function submitApp(e) {
+        e.preventDefault();
+        const name = document.getElementById("name").value;
+        const uid = document.getElementById("uid").value;
+        const region = document.getElementById("region").value;
+        const id = Math.random().toString(36).slice(2, 8).toUpperCase();
+
+        tickets.push({ id, name, uid, region, status: "Pending" });
+        document.getElementById("appMsg").innerText = "✅ Application Submitted! Your ID: " + id;
+
+        updateTickets();
+        e.target.reset();
+      }
+
+      function updateTickets() {
+        const list = document.getElementById("ticketList");
+        if (tickets.length === 0) {
+          list.innerHTML = "<p>No applications yet.</p>";
+          return;
+        }
+        list.innerHTML = tickets
+          .map(
+            (t) => `
+          <div class="card" style="background:rgba(100,0,0,0.2);margin:6px 0;">
+            <p><b>ID:</b> ${t.id}</p>
+            <p><b>Name:</b> ${t.name}</p>
+            <p><b>Status:</b> ${t.status}</p>
+          </div>
+        `
+          )
+          .join("");
+      }
+    </script>
   </body>
 </html>
